@@ -2,13 +2,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <c:set var="ctxPath" value="${pageContext.request.contextPath}"/>
-<c:set var="pageNo" value="${pageNo}" scope="request" />
-<c:set var="totPage" value="${totPage}" scope="request" />
-<c:set var="curScrStartNo" value="${curScrStartNo}" scope="request" />
-<c:set var="blockSize" value="${blockSize}" scope="request" />
-<c:set var="curBlock" value="${curBlock}" scope="request" />
-<c:set var="lastBlock" value="${lastBlock}" scope="request" />
-<%-- <c:set var="pageSize" value="${pageSize}" scope="request" /> --%>
 <c:set var="LF" value="\n" scope="page" />
 <c:set var="BR" value="<br>" scope="page" />
 <c:set var="First" value="<<" scope="page" />
@@ -16,11 +9,9 @@
 <c:set var="Prev" value="◁" scope="page" />
 <c:set var="Next" value="▷" scope="page" />
 
-<c:set var="no" value="${vos.size()}" scope="page" />
 <c:set var="attrMapTgt" scope="request" />
 <c:set var="attrMid" scope="request" />
 <c:set var="attrLevel" scope="request" />
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -176,7 +167,7 @@
 				<th>공개유무</th>
 				<th>회원등급</th>
 			</tr>
-<c:forEach var="vo" items="${vos}" varStatus="stat">
+<c:forEach var="vo" items="${vos}" >
 			<tr>
 				<td>
 					<input type="checkbox" name="arrChk" width="15px" height="15px"/>
@@ -218,14 +209,15 @@
 <c:if test="${curBlock > 0}">
 				[<a href='adminMemberList.adm?pageNo=${(curBlock-1)*blockSize+1}' title='prevBlock'>이전블록</a>]
 </c:if>
- 				<c:set var="isBreak" value="false"/>
-				<c:forEach var="i" begin="${(curBlock*blockSize)+1}" end="${(curBlock*blockSize)+blockSize}" step="1"> 
-					<c:if test="${i>totPage}"><c:set var="isBreak" value="true"/></c:if>
-					<c:if test="${isBreak == false}">
-						<c:if test="${i==pageNo}">[<a href='adminMemberList.adm?pageNo="${i}"'><font color='red'><b>${i}</b></font></a>]</c:if>
-						<c:if test="${i!=pageNo}"></c:if>
-					</c:if>
-				</c:forEach>
+<c:set var="isBreak" value="false"/>
+				<c:forEach var="i" begin="${(curBlock*blockSize)+1}" end="${(curBlock*blockSize)+blockSize}">
+			      <c:if test="${i <= totPage && i == pageNo}">
+			        [<a href="adminMemberList.adm?pageNo=${i}"><font color='red'><b>${i}</b></font></a>]
+			      </c:if>
+			      <c:if test="${i <= totPage && i != pageNo}">
+			        [<a href="adminMemberList.adm?pageNo=${i}">${i}</a>]
+			      </c:if>
+			    </c:forEach>
 <c:if test="${curBlock < lastBlock}">
 				[<a href='adminMemberList.adm?pageNo=${(curBlock+1)*blockSize+1}' title='nextBlock'>다음블록</a>]
 </c:if>
