@@ -32,6 +32,6 @@ public class AdminMemberListCommand implements AdminInterface {
 				0, paging.getStartIndexNo(), paging.getPageSize());//관리자의 경우 level=0, 관리자가 아닐 경우 level=99
 		
 		request.setAttribute("vos", vos);
-		request.setAttribute("curScrStartNo", vos.size());
+//		request.setAttribute("curScrStartNo", vos.size());
 	}
 }
