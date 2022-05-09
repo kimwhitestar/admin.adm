@@ -16,11 +16,11 @@
 <c:set var="Prev" value="◁" scope="page" />
 <c:set var="Next" value="▷" scope="page" />
 
-<c:set var="vos" value="${vos}" scope="request" />
 <c:set var="no" value="${vos.size()}" scope="page" />
 <c:set var="attrMapTgt" scope="request" />
 <c:set var="attrMid" scope="request" />
 <c:set var="attrLevel" scope="request" />
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -32,7 +32,7 @@
     	'use strict';
 		let mapTarget = new HashMap();
 
-		function arrangeTargetMap() {
+/* 		function arrangeTargetMap() {
     		let elmtArrChk = myForm.arrChk;
     		let elmtArrIdx = myForm.arrIdx;
     		let elmtArrMid = myForm.arrMid;
@@ -40,7 +40,7 @@
     		
     		//once 1개만 체크됬으면 cnt가 1이므로 new Array[1]로, 여러개 체크됬으면 new Array[cnt]로 배열생성
     		let cnt = 0, index = 0;
-    		for (int i=0; i<elmtArrChk.length(); i++) {
+    		for (let i=0; i<elmtArrChk.length; i++) {
         		if (elmtArrChk[i].checked) ++cnt;
     		}
     		if (0 == cnt) {
@@ -50,11 +50,11 @@
     		let targetArrIdx = new Array[cnt];
     		let targetArrMid = new Array[cnt];
     		let targetArrLevel = new Array[cnt];
-    		for (int i=0; i<elmtArrChk.length(); i++) {
+    		for (let i=0; i<elmtArrChk.length; i++) {
         		if (elmtArrChk[i].checked) {
         			targetArrIdx[index] = elmtArrIdx[i].value;
         			targetArrMid[index] = elmtArrMid[i].value;
-        			for (int j=0; j<elmtSelArrLevel[i].options.length(); j++) {
+        			for (let j=0; j<elmtSelArrLevel[i].options.length; j++) {
         				if (elmtSelArrLevel[i].options[j].selected)
         					targetArrLevel[index] = elmtSelArrLevel[i].options[j].value;
         			}
@@ -99,10 +99,11 @@
     	function changeLevel(targetLevel) {
     		let arrOption = targetLevel.options;
     		let levelValue = '';
-    		for (int i=0; i<arrOption.length(); i++) {
+    		for (let i=0; i<arrOption.length; i++) {
     			if (arrOption[i].selected) levelValue = arrOption[i].value;
     		}
-    		alert('등급변경 버튼을 클릭하면 선택된 등급으로 수정됩니다' + levelValue);
+    		alert('선택한 등급의 value = ' + levelValue);
+    		alert('등급변경 버튼을 클릭하면 선택된 등급으로 수정됩니다');
     		${attrLevel} = levelValue;
     	}
     	function updateMemberLevel(flg, chk) {
@@ -114,7 +115,7 @@
     		if ('once' == chk) arrangeTargetMap(flg, ${attrMid}, null);
     		else if ('checked' == chk) arrangeTargetMap();
     		if (confirm('정말 회원에서 삭제처리하겠습니까?')) {
-    			location.href = '${ctxPath}/adminMemberDelete.adm;
+    			location.href = '${ctxPath}/adminMemberDelete.adm';
     		}
     	}
     	function locationControl(flg, chk, mid) {
@@ -126,17 +127,18 @@
     		${attrMid} = mid;
     		let url = '${ctxPath}/memberDetail.mbr';
     		window.open(url,"memberDetailWin","width=800px,height=600px");
-    	}
+    	} */
     </script>
 </head>
 <body>
-<p><br></p>
+<p>
+<br></p>
 <div class="container">
 	<h2 class="text-center">관리자 전체 회원 목록</h2>
 	<form name="myForm" method="post" action="${ctxPath}/adminMemberList.adm">
 		<div class="m-2 row">
 			<div class="col text-left">
-				<select name="level">
+				<select name="level" onchange="changeLevel(this)">
 					<option value="0" <c:if test="${0 == vo.level}">selected</c:if> >관리자</option>
 					<option value="1" <c:if test="${1 == vo.level}">selected</c:if> >정회원</option>
 					<option value="2" <c:if test="${2 == vo.level}">selected</c:if> >준회원</option>
@@ -174,12 +176,12 @@
 				<th>공개유무</th>
 				<th>회원등급</th>
 			</tr>
-<c:forEach var="vo" items="vos" varStatus="stat">
+<c:forEach var="vo" items="${vos}" varStatus="stat">
 			<tr>
 				<td>
-					<input type="checkbox" name="arrChk" width="15px" height="15px">
-					<input type="hidden" name="arrIdx" value="${vo.idx}"/>
+					<input type="checkbox" name="arrChk" width="15px" height="15px"/>
 					<input type="hidden" name="arrMid" value="${vo.mid}"/>
+					<input type="hidden" name="arrIdx" value="${vo.idx}"/>
 				</td>
 				<td><c:out value="${curScrStartNo}"></c:out></td>
 				<td><a href="javascript:openWindowMemberDetail(${vo.mid})"><c:out value="${vo.mid}"></c:out></a></td>
@@ -188,7 +190,7 @@
 				<td><c:out value="${vo.gender}"></c:out></td>
 				<td><c:out value="${vo.userInfo}"></c:out></td>
 				<td>
-					<select name="arrLevel" onchange="changeLevel(this.arrLevel)">
+					<select name="arrLevel" onchange="changeLevel(this)">
 						<option value="0" <c:if test="${0 == vo.level}">selected</c:if> >관리자</option>
 						<option value="1" <c:if test="${1 == vo.level}">selected</c:if> >정회원</option>
 						<option value="2" <c:if test="${2 == vo.level}">selected</c:if> >준회원</option>

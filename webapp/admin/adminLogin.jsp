@@ -32,7 +32,7 @@
   	  </tr>
   	  <tr>
   	    <td colspan="2">
-  	      <button type="button" class="btn btn-success" onclick="checkLevel()">관리자 로그인</button> &nbsp;&nbsp;
+  	      <button type="submit" class="btn btn-success">관리자 로그인</button> &nbsp;&nbsp;
   	      <button type="reset" class="btn btn-success">다시입력</button> &nbsp;&nbsp;
   	      <button type="button" class="btn btn-success" onclick="javascript:history.back();">돌아가기</button> &nbsp;&nbsp;
   	    </td>
