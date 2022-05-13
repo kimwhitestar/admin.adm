@@ -47,6 +47,11 @@ public class AdminController extends HttpServlet {
 		if (com.equals("adminContent")) {
 			viewPage += "/admin/adminContent.jsp";
 		}
+		//전체회원 게시판
+		else if (com.equals("adminBoardList")) {
+			command = new AdminBoardListCommand();
+			viewPage += "/admin/board/adminBoardList.jsp";
+		}
 		//관리자 대시보드-전체회원 방명록
 		else if (com.equals("adminGuestList")) {
 			command = new AdminGuestListCommand();
