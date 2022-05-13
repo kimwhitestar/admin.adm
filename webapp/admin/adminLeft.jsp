@@ -25,7 +25,7 @@
 	<p><a href="${ctxPath}/" target="_top">홈으로</a></p>
 	<p><a href="${ctxPath}/adminMemberList.adm" target="adminContent">회원관리</a></p>
 	<p><a href="${ctxPath}/adminGuestList.adm" target="adminContent">방명록</a></p>
-	<p><a href="${ctxPath}/" target="adminContent">게시판</a></p>
+	<p><a href="${ctxPath}/adminBoardList.adm" target="adminContent">게시판</a></p>
 	<p><a href="${ctxPath}/" target="adminContent">PDS</a></p>
 	<p><a href="${ctxPath}/" target="adminContent">자료실</a></p>
 	<p><a href="javascript:logoutCheck()" >로그아웃</a></p>
