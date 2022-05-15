@@ -72,10 +72,10 @@ public class Paging {
 		request.setAttribute("curScrStartNo", curScrStartNo);
 		request.setAttribute("pageNo", pageNo);
 		request.setAttribute("totPage", totPage);
-		//request.setAttribute("pageSize", pageSize);
+		request.setAttribute("pageSize", this.pageSize);
 		request.setAttribute("blockSize", blockSize);
 		request.setAttribute("curBlock", curBlock);
-		request.setAttribute("lastBlock", lastBlock);		
+		request.setAttribute("lastBlock", lastBlock);
 	}
 	
 	/**
