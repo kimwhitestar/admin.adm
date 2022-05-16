@@ -8,7 +8,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import admin.database.AdminDAO;
-import conn.SecurityUtil;
 
 public class AdminLoginOkCommand implements AdminInterface {
 
@@ -18,9 +17,8 @@ public class AdminLoginOkCommand implements AdminInterface {
 		int level = session.getAttribute("sLevel")==null? 99 : (int) session.getAttribute("sLevel");
 		String mid = request.getParameter("mid");
 		String pwd = request.getParameter("pwd");
-		String shaPwd = new SecurityUtil().encryptSHA256(pwd);//비밀번호 암호화처리-SHA2(sha256)
 
-		int res = new AdminDAO().searchAdminLogin(mid, shaPwd);
+		int res = new AdminDAO().searchAdminLogin(mid, pwd);
 
 		if (1 == res) {
 			session.setAttribute("sLevel", 0);

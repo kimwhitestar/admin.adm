@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import member.MemberInterface;
-import member.database.MemberDAO;
+import admin.database.MemberDAO;
 
 public class AdminMemberDeleteCommand implements AdminInterface {
 
@@ -35,8 +35,7 @@ public class AdminMemberDeleteCommand implements AdminInterface {
 		for (int i=0; i<targetArrIdx.length; i++) {
 			//id중복체크해서 mid만으로 DB DML SQL작성하기로 함
 			//int res = dao.delete(targetArrIdx[i], targetArrMid[i]);//회원삭제
-			int res = dao.delete(targetArrMid[i]);//회원삭제
-			if (1 == res) ++resCnt;
+			//if (1 == res) ++resCnt;
 		}
 		
 //		if (resCnt == targetArrIdx.length) {

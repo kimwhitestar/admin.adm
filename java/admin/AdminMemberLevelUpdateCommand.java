@@ -7,7 +7,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import member.database.MemberDAO;
+import admin.database.MemberDAO;
 
 public class AdminMemberLevelUpdateCommand implements AdminInterface {
 
@@ -35,8 +35,7 @@ public class AdminMemberLevelUpdateCommand implements AdminInterface {
 		int resCnt = 0;
 		for (int i=0; i<targetArrIdx.length; i++) {
 			//id중복체크해서 mid만으로 DB DML SQL작성하기로 함
-			//int res = dao.updateMemberLevel(targetArrLevel[i], targetArrIdx[i], targetArrMid[i]);//회원레벨 수정
-			int res = dao.updateMemberLevel(targetArrLevel[i], targetArrMid[i]);//회원레벨 수정
+			int res = dao.updateMemberLevel(targetArrLevel[i], targetArrIdx[i], targetArrMid[i]);//회원레벨 수정
 			if (1 == res) ++resCnt;
 		}
 		
