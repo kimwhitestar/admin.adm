@@ -13,7 +13,7 @@
     <script>
     	'use strict';
     	function logoutCheck() {
-    		parent.location.href = "${ctxPath}/memberLogout.mbr";
+    		parent.location.href = "${ctxPath}/adminLogout.adm";
     	}
     </script>
 </head>

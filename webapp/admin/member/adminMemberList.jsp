@@ -22,12 +22,12 @@
     <script>
     	'use strict';
 		let mapTarget = new HashMap();
-
+//Json처럼 front화면에서 직접 비동기db연동할 경우 연습용ㅜㅜ(해본적없음)
 /* 		function arrangeTargetMap() {
-    		let elmtArrChk = myForm.arrChk;
-    		let elmtArrIdx = myForm.arrIdx;
-    		let elmtArrMid = myForm.arrMid;
-    		let elmtSelArrLevel = myForm.arrLevel;
+    		let elmtArrChk = memberForm.arrChk;
+    		let elmtArrIdx = memberForm.arrIdx;
+    		let elmtArrMid = memberForm.arrMid;
+    		let elmtSelArrLevel = memberForm.arrLevel;
     		
     		//once 1개만 체크됬으면 cnt가 1이므로 new Array[1]로, 여러개 체크됬으면 new Array[cnt]로 배열생성
     		let cnt = 0, index = 0;
@@ -114,11 +114,42 @@
     		if ('update' == flg) updateMemberLevel(flg, chk);
            	else if ('delete' == flg) deleteMember(flg, chk);
     	}
-    	function openWindowMemberDetail(mid) {
-    		${attrMid} = mid;
+*/    	
+/*     	function openWindowMemberDetail(idx, mid) {
+    		$("#idx") = idx;
+    		$("#mid") = mid;
     		let url = '${ctxPath}/memberDetail.mbr';
     		window.open(url,"memberDetailWin","width=800px,height=600px");
-    	} */
+    	}
+ */		function openWindowMemberDetail(idx, mid) {
+			let url = '${ctxPath}/memberDetail.mbr';
+			let param = {	idx : idx, 
+							mid : mid 	};
+			$.ajax({
+				type:		"post",
+				url:		"${ctxPath}/memberDetail.mbr",
+				data:		param,
+				success:	function(res) {
+//					window.open(url, 'memberDetailWin', 'width=800px,height=600px,toolbar=0,status=0,menubar=0,scrollbars=yes');
+					window.open(url, 'memberDetailWin', 'width=800px,height=600px,scrollbars=yes');
+/*     				if("1"==res) location.reload();
+					else alert('회원상세정보를 찾을 수 없습니다');
+*/    			},
+				error:		function() {
+					alert('요청 오류~~');
+				}
+			});
+		}
+		function changePaging() {
+			$("#pageNo").val(1);
+			memberForm.action = "${ctxPath}/adminMemberList.adm";//Post요청
+			memberForm.submit();
+		}
+		function changePage(pageNo) {
+			$("#pageNo").val(pageNo);
+			memberForm.action = "${ctxPath}/adminMemberList.adm";//Post요청
+			memberForm.submit();
+		}
     </script>
 </head>
 <body>
@@ -126,7 +157,8 @@
 <br></p>
 <div class="container">
 	<h2 class="text-center">관리자 전체 회원 목록</h2>
-	<form name="myForm" method="post" action="${ctxPath}/adminMemberList.adm">
+	<form name="memberForm" method="post" action="${ctxPath}/adminMemberList.adm">
+		<input type="hidden" id="pageNo" name="pageNo"/>
 		<div class="m-2 row">
 			<div class="col text-left">
 				<select name="level" onchange="changeLevel(this)">
@@ -143,20 +175,30 @@
 			
 			<!-- 페이징 처리 시작 -->
 			<div class="col text-right">
-<c:if test="${pageNo > 1}">
-				<a href='adminMemberList.adm?pageNo=1' title='first'>${First}</a>
-					<a href='adminMemberList.adm?pageNo=${pageNo - 1}' title='prev'>${Prev}</a>
-</c:if>
-					${pageNo}Page / ${totPage}Pages
-<c:if test="${pageNo != totPage}">
-					<a href='adminMemberList.adm?pageNo=${pageNo + 1}' title='next'>${Next}</a>
-</c:if>
-				<a href='adminMemberList.adm?pageNo=${totPage}' title='last'>${Last}</a>
+			<c:if test="${pageNo > 1}">
+				<a href="javascript:changePage('1')" title='first'>${First}</a>
+					<a href="javascript:changePage('${pageNo - 1}')" title='prev'>${Prev}</a>
+			</c:if>
+						${pageNo}Page / ${totPage}Pages
+			<c:if test="${pageNo != totPage}">
+					<a href="javascript:changePage('${pageNo + 1}')" title='next'>${Next}</a>
+			</c:if>
+				<a href="javascript:changePage('${totPage}')" title='last'>${Last}</a>
 			</div>
 			<!-- 페이징 처리 끝 -->
 			
+			<div class="text-right p-0">
+				<select name="pageSize" id="pageSize" onchange="changePaging()">
+					<option value="5"  ${5==pageSize  ? 'selected' : ''} >5건</option>
+					<option value="10" ${10==pageSize ? 'selected' : ''} >10건</option>
+					<option value="15" ${15==pageSize ? 'selected' : ''} >15건</option>
+					<option value="20" ${20==pageSize ? 'selected' : ''} >20건</option>
+				</select>
+			</div>	
 		</div>
-		<table class="table table-hover text-center">
+<!-- 	<input type="hidden" id="idx" name="idx"/>
+		<input type="hidden" id="mid" name="mid"/>
+ -->		<table class="table table-hover text-center">
 			<tr class="table-dark text-dark">
 				<th><input type="checkbox" name="allChk" width="15px" height="15px"></th>
 				<th>번호</th>
@@ -166,16 +208,17 @@
 				<th>성별</th>
 				<th>공개유무</th>
 				<th>회원등급</th>
+				<th>회원활동상태</th>
 			</tr>
-<c:forEach var="vo" items="${vos}" >
+			<c:forEach var="vo" items="${vos}" >
 			<tr>
 				<td>
 					<input type="checkbox" name="arrChk" width="15px" height="15px"/>
 					<input type="hidden" name="arrMid" value="${vo.mid}"/>
 					<input type="hidden" name="arrIdx" value="${vo.idx}"/>
 				</td>
-				<td><c:out value="${curScrStartNo}"></c:out></td>
-				<td><a href="javascript:openWindowMemberDetail(${vo.mid})"><c:out value="${vo.mid}"></c:out></a></td>
+				<td><c:out value="${curScrStartNo}"/></td>
+				<td><a href="javascript:openWindowMemberDetail('${vo.idx}', '${vo.mid}')"><c:out value="${vo.mid}"></c:out></a></td>
 				<td><c:out value="${vo.nickName}"></c:out></td>
 				<td><c:out value="${vo.name}"></c:out></td>
 				<td><c:out value="${vo.gender}"></c:out></td>
@@ -198,35 +241,35 @@
 				</td>
 			</tr>
 			<c:set var="curScrStartNo" value="${curScrStartNo-1}"/>
-</c:forEach>
+			</c:forEach>
 		</table>
 		
 		<!-- 블럭페이징 처리 시작 -->
 		<div class="text-center">
-<c:if test="${pageNo > 1}">
-			[<a href='adminMemberList.adm?pageNo=1' title='first'>첫페이지</a>]
-</c:if>
-<c:if test="${curBlock > 0}">
-				[<a href='adminMemberList.adm?pageNo=${(curBlock-1)*blockSize+1}' title='prevBlock'>이전블록</a>]
-</c:if>
-<c:set var="isBreak" value="false"/>
+			<div class="pagination justify-content-center">
+			<c:if test="${pageNo > 1}">
+				<li class="page-item"><a href='javascript:changePage(1)' title='first' class="page-link text-secondary" >첫페이지</a></li>
+			</c:if>
+			<c:if test="${curBlock > 0}">
+				<li class="page-item"><a href="javascript:changePage('${(curBlock-1)*blockSize+1}')" title='prevBlock' class="page-link text-secondary" >이전블록</a>
+			</c:if>
 				<c:forEach var="i" begin="${(curBlock*blockSize)+1}" end="${(curBlock*blockSize)+blockSize}">
 			      <c:if test="${i <= totPage && i == pageNo}">
-			        [<a href="adminMemberList.adm?pageNo=${i}"><font color='red'><b>${i}</b></font></a>]
+			        <li class="page-item active"><a href="javascript:changePage('${i}')" class="page-link text-light bg-secondary border-secondary" >${i}</a>
 			      </c:if>
 			      <c:if test="${i <= totPage && i != pageNo}">
-			        [<a href="adminMemberList.adm?pageNo=${i}">${i}</a>]
+			        <li class="page-item"><a href="javascript:changePage('${i}')" class="page-link text-secondary" >${i}</a>
 			      </c:if>
 			    </c:forEach>
-<c:if test="${curBlock < lastBlock}">
-				[<a href='adminMemberList.adm?pageNo=${(curBlock+1)*blockSize+1}' title='nextBlock'>다음블록</a>]
-</c:if>
-<c:if test="${page != totPage}">
-			[<a href='adminMemberList.adm?pageNo=${totPage}' title='last'>마지막페이지</a>]
-</c:if>
+			<c:if test="${curBlock < lastBlock}">
+				<li class="page-item"><a href="javascript:changePage('${(curBlock+1)*blockSize+1}')" title='nextBlock' class="page-link text-secondary" >다음블록</a>
+			</c:if>
+			<c:if test="${pageNo != totPage}">
+			<li class="page-item"><a href="javascript:changePage('${totPage}')" title='last' class="page-link text-secondary" >마지막페이지</a>
+			</c:if>
+			</div>
 		</div>
 		<!-- 블럭페이징 처리 끝 -->
-		
 	</form>
 </div>
 </body>

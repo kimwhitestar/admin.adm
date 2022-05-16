@@ -22,43 +22,72 @@
 <div class="container" style="margin-top:30px">
   <div class="row">
     <div class="col-sm-4">
-      <h3 class="p-2 text-left">신규 가입 회원</h3>
-      <h6 class="text-left">최근 가입한 회원 명단</h6>
+      <h3 class="p-2 text-left">전체 회원 목록</h3>
+      <h6 class="text-left">회원 명단</h6>
       <div class="dashimg">
         <table class="table table-bordered text-center m-0">
           <tr class="text-white bg-info">
             <th>아이디</th>
             <th>닉네임</th>
           </tr>
-	        <c:forEach var="i" begin="0" end="${memberVos.size() > 9 ? 9 : memberVos.size()}">
+	        <c:forEach var="i" begin="0" end="${adminMemberVos.size() > 9 ? 9 : adminMemberVos.size()}">
 	          <tr>
-	             <td>&nbsp; - ${memberVos[i].mid}</td>
-	             <td>${memberVos[i].nickName}</td>
+	             <td>${adminMemberVos[i].mid}</td>
+	             <td>${adminMemberVos[i].nickName}</td>
 	           </tr>
 	        </c:forEach>
 	      </table>
       </div>
-      <p>1회 방문시마다 5point를 지급합니다.(단, 1일 최대 50point 까지 지급)</p>
-      <h3 class="text-left">탈퇴신청한 회원</h3>
-      <p class="text-left">최근 신청자</p>
-      <ul class="nav nav-pills flex-column text-center">
-        <li class="nav-item">
-          <a class="nav-link active bg-info" href="#">탈퇴신청 회원명단</a>
-        </li>
-        <li class="nav-item">
-	      <a class="nav-link" href="#"></a>
-        </li>
-        <li class="nav-item">
-	      <a class="nav-link" href="#"></a>
-        </li>
-        <li class="nav-item">
-	      <a class="nav-link" href="#"></a>
-        </li>
-         <li class="nav-item">
-          <a class="nav-link disabled" href="#">Disabled</a>
-        </li>
-      </ul>
-      <hr class="d-sm-none">
+      <h3 class="text-left">접속 회원 목록</h3>
+      <h6 class="text-left">최근에 접속한 회원 명단</h6>
+      <div class="dashimg">
+        <table class="table table-bordered text-center m-0">
+          <tr class="text-white bg-info">
+            <th>아이디</th>
+            <th>닉네임</th>
+          </tr>
+	        <c:forEach var="i" begin="0" end="${recentlyLoginMemberVos.size() > 9 ? 9 : recentlyLoginMemberVos.size()}">
+	          <tr>
+	             <td>${recentlyLoginMemberVos[i].mid}</td>
+	             <td>${recentlyLoginMemberVos[i].nickName}</td>
+	           </tr>
+	        </c:forEach>
+	      </table>
+		</div>
+    </div>
+    <div class="col-sm-4">
+      <h3 class="p-2 text-left">신규 가입 회원</h3>
+      <h6 class="text-left">최근에 가입한 회원 명단</h6>
+      <div class="dashimg">
+        <table class="table table-bordered text-center m-0">
+          <tr class="text-white bg-info">
+            <th>아이디</th>
+            <th>닉네임</th>
+          </tr>
+	        <c:forEach var="i" begin="0" end="${recetylyEntryMemberVos.size() > 9 ? 9 : recetylyEntryMemberVos.size()}">
+	          <tr>
+	             <td>${recetylyEntryMemberVos[i].mid}</td>
+	             <td>${recetylyEntryMemberVos[i].nickName}</td>
+	           </tr>
+	        </c:forEach>
+	      </table>
+      </div>
+      <h3 class="text-left">탈퇴 회원</h3>
+      <h6 class="text-left">최근에 탈퇴한 회원 명단</h6>
+      <div class="dashimg">
+        <table class="table table-bordered text-center m-0">
+          <tr class="text-white bg-info">
+            <th>아이디</th>
+            <th>닉네임</th>
+          </tr>
+	        <c:forEach var="i" begin="0" end="${pracLeaveMemberVos.size() > 9 ? 9 : pracLeaveMemberVos.size()}">
+	          <tr>
+	             <td>${pracLeaveMemberVos[i].mid}</td>
+	             <td>${pracLeaveMemberVos[i].nickName}</td>
+	           </tr>
+	        </c:forEach>
+	      </table>
+		</div>
     </div>
     <div class="col-sm-8">
       <h3 class="text-left p-2">게시판 신규자료</h3>
@@ -69,10 +98,10 @@
             <th width="38%">올린이</th>
             <th width="62%">글제목</th>
           </tr>
-	        <c:forEach var="i" begin="0" end="${boardVos.size() > 9 ? 9 : boardVos.size()}">
+	        <c:forEach var="i" begin="0" end="${adminBoardVos.size() > 9 ? 9 : adminBoardVos.size()}">
 	          <tr>
-	             <td>${boardVos[i].nickName}</td>
-	             <td>${boardVos[i].title}</td>
+	             <td>${adminBoardVos[i].nickName}</td>
+	             <td>${adminBoardVos[i].title}</td>
 	           </tr>
 	        </c:forEach>
 	      </table>
@@ -88,10 +117,10 @@
             <th width="68%">내용</th>
             <th width="32%">방문자</th>
           </tr>
-	        <c:forEach var="i" begin="0" end="${guestVos.size() > 9 ? 9 : guestVos.size()}">
+	        <c:forEach var="i" begin="0" end="${adminGuestVos.size() > 9 ? 9 : adminGuestVos.size()}">
 	          <tr >
-	             <td>${guestVos[i].content}</td>
-	             <td>${guestVos[i].name}</td>
+	             <td>${adminGuestVos[i].content}</td>
+	             <td>${adminGuestVos[i].name}</td>
 	           </tr>
 	        </c:forEach>
 	      </table>

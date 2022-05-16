@@ -10,7 +10,6 @@
     <style></style>
     <script>
     	'use strict';
-    	
     </script>
     <frameset cols="13%, 87%">
     	<frame src="${ctxPath}/adminLeft.adm" name="adminLeft" frameborder="0"/>
