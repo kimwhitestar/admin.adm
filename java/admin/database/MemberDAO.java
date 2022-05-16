@@ -18,15 +18,16 @@ public class MemberDAO {
 	private MemberVO vo = null;
 	private String sql = new String("");
 
-	public MemberDAO() {}
-	
 	//페이징 총 레코드건수 - 전체회원목록(활동중 회원)
 	public int memberListTotRecCnt(char kindYmd, int term) {
 		int totRecCnt = 0;
 		try {
+			int prepareIdx = 0;
 			String addPrepareSQL1 = makeIntervalSQL(kindYmd, term, "startDate");
-			sql = "select count(*) as totRecCnt from member where userDel = 'NO' " + "and " + addPrepareSQL1;
+			sql = "select count(*) as totRecCnt from member where userDel = 'NO' ";
+			if (0 < addPrepareSQL1.length()) sql = sql + "and " + addPrepareSQL1;
 			pstmt = conn.prepareStatement(sql);
+			if (0 < addPrepareSQL1.length()) pstmt.setInt(++prepareIdx, term);
 			rs = pstmt.executeQuery();
 			rs.next(); //ResultSet레코드움직이기(count함수는 무조건 0값조차 가져옴)
 			totRecCnt = rs.getInt("totRecCnt");
@@ -42,11 +43,12 @@ public class MemberDAO {
 	public int recentlyEntryMemberListTotRecCnt(char kindYmd, int term) {
 		int totRecCnt = 0;
 		try {
-			String addPrepareSQL1 = makeIntervalSQL('M', 1, "startDate");//가입일 1개월차
-			String addPrepareSQL2 = makeIntervalSQL(kindYmd, term, "startDate");//기간별 검색키
-			sql = "select count(*) as totRecCnt from member where " + addPrepareSQL1;//가입일 1개월차(기본조건)
-			if (0 < addPrepareSQL2.length()) sql = sql + "and " + addPrepareSQL2;//기간별 검색키
+			int prepareIdx = 0;
+			String addPrepareSQL1 = makeIntervalSQL(kindYmd, term, "startDate");//기간별 검색키
+			sql = "select count(*) as totRecCnt from member where " + makeIntervalSQL('M', 1, "startDate");//가입일 1개월차
+			if (0 < addPrepareSQL1.length()) sql = sql + "and " + addPrepareSQL1;//기간별 검색키
 			pstmt = conn.prepareStatement(sql);
+			if (0 < addPrepareSQL1.length()) pstmt.setInt(++prepareIdx, term);
 			rs = pstmt.executeQuery();
 			rs.next(); //ResultSet레코드움직이기(count함수는 무조건 0값조차 가져옴)
 			totRecCnt = rs.getInt("totRecCnt");
@@ -106,7 +108,7 @@ public class MemberDAO {
 		try {
 			int prepareIdx = 0;
 			String addPrepareSQL1 = makeIntervalSQL(kindYmd, term, "startDate");
-			sql = "select * from member where userDel = 'NO' ";
+			sql = "select *, timestampdiff(day, lastDate, now()) as overDaysUserDel from member where userDel = 'NO' ";
 			if(0 < addPrepareSQL1.length()) sql = sql + addPrepareSQL1;
 			sql += "order by idx desc limit ?, ? ";
 			pstmt = conn.prepareStatement(sql);
@@ -157,7 +159,7 @@ public class MemberDAO {
 			int prepareIdx = 0;
 			String addPrepareSQL1 = makeIntervalSQL('M', 1, "startDate");//가입일 1개월차
 			String addPrepareSQL2 = makeIntervalSQL(kindYmd, term, "startDate");//검색조건키(weekly등)
-			sql = "select * from member where " + addPrepareSQL1; //가입 1개월차 기본조건
+			sql = "select *, timestampdiff(day, lastDate, now()) as overDaysUserDel from member where " + addPrepareSQL1; //가입 1개월차 기본조건
 			if(0 < addPrepareSQL2.length()) sql = sql + "and " + addPrepareSQL2;
 			sql += "order by idx desc limit ?, ? ";
 			pstmt = conn.prepareStatement(sql);
@@ -208,7 +210,7 @@ public class MemberDAO {
 		try {
 			int prepareIdx = 0;
 			String addPrepareSQL1 = makeIntervalSQL(kindYmd, term, "lastDate");
-			sql = "select * from member where userDel = 'NO' ";
+			sql = "select *, timestampdiff(day, lastDate, now()) as overDaysUserDel from member where userDel = 'NO' ";
 			if(0 < addPrepareSQL1.length()) sql = sql + "and " + addPrepareSQL1;
 			sql = sql + "order by lastDate desc limit ?, ? ";
 			pstmt = conn.prepareStatement(sql);
@@ -258,7 +260,7 @@ public class MemberDAO {
 		try {
 			int prepareIdx = 0;
 			String addPrepareSQL1 = makeIntervalSQL(kindYmd, term, "startDate");
-			sql = "select * from member "
+			sql = "select *, timestampdiff(day, lastDate, now()) as overDaysUserDel from member "
 					+ "where userDel = 'OK' "//탈퇴회원(임시탈퇴자, 로그인삭)
 					+ "and timestampdiff(day, lastDate, now()) >= 30 ";//임시탈퇴유지기간 30일
 			if(0 < addPrepareSQL1.length()) sql = sql + addPrepareSQL1;

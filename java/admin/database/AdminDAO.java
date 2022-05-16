@@ -5,8 +5,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import common.SecurityUtil;
 import conn.MysqlConn;
-import member.database.MemberVO;
 
 public class AdminDAO {
 	private final MysqlConn instance = MysqlConn.getInstance();
@@ -24,7 +24,7 @@ public class AdminDAO {
 			sql = "select * from member where level = 0 and mid = ? and pwd = ? ";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, mid);
-			pstmt.setString(2, pwd);
+			pstmt.setString(2, new SecurityUtil().encryptSHA256(pwd));//비밀번호 암호화처리-SHA2(sha256)
 			rs = pstmt.executeQuery();
 			if (rs.next()) res = 1;
 		} catch (SQLException e) {
