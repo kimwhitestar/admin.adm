@@ -108,7 +108,7 @@ public class MemberDAO {
 		try {
 			int prepareIdx = 0;
 			String addPrepareSQL1 = makeIntervalSQL(kindYmd, term, "startDate");
-			sql = "select *, timestampdiff(day, lastDate, now()) as overDaysUserDel from member where userDel = 'NO' ";
+			sql = "select *, timestampdiff(day, lastDate, now()) as overDaysUserDel from member ";
 			if(0 < addPrepareSQL1.length()) sql = sql + addPrepareSQL1;
 			sql += "order by idx desc limit ?, ? ";
 			pstmt = conn.prepareStatement(sql);
